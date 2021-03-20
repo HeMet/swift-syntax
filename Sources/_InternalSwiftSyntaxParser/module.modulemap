@@ -1,0 +1,5 @@
+module _InternalSwiftSyntaxParser {
+  header "SwiftSyntaxParser.h"
+  link "_InternalSwiftSyntaxParser"
+  export *
+}

@@ -16,6 +16,10 @@ let package = Package(
   ]
 )
 
+#if os(Windows)
+package.targets.append(.systemLibrary(name: "_InternalSwiftSyntaxParser"))
+#endif
+
 let swiftSyntaxTarget: PackageDescription.Target
 
 /// If we are in a controlled CI environment, we can use internal compiler flags
@@ -36,7 +40,16 @@ if ProcessInfo.processInfo.environment["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] != nil 
                               swiftSettings: [.unsafeFlags(swiftSyntaxUnsafeFlags)]
   )
 } else {
-  swiftSyntaxTarget = .target(name: "SwiftSyntax", dependencies: ["_CSwiftSyntax"])
+  var dependencies: [Target.Dependency] = ["_CSwiftSyntax"]
+  var linkerSettings: [LinkerSetting] = []
+
+  #if os(Windows)
+    dependencies.append("_InternalSwiftSyntaxParser")
+    let swiftSyntaxUnsafeFlags = ["-LSources\\_InternalSwiftSyntaxParser"]
+    linkerSettings.append(.unsafeFlags(swiftSyntaxUnsafeFlags))
+  #endif
+
+  swiftSyntaxTarget = .target(name: "SwiftSyntax", dependencies: dependencies, linkerSettings: linkerSettings)
 }
 
 package.targets.append(swiftSyntaxTarget)
