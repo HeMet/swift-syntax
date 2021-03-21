@@ -45,8 +45,6 @@ if ProcessInfo.processInfo.environment["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] != nil 
 
   #if os(Windows)
     dependencies.append("_InternalSwiftSyntaxParser")
-    let swiftSyntaxUnsafeFlags = ["-LSources\\_InternalSwiftSyntaxParser"]
-    linkerSettings.append(.unsafeFlags(swiftSyntaxUnsafeFlags))
   #endif
 
   swiftSyntaxTarget = .target(name: "SwiftSyntax", dependencies: dependencies, linkerSettings: linkerSettings)
