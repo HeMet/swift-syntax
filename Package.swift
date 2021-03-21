@@ -41,13 +41,12 @@ if ProcessInfo.processInfo.environment["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] != nil 
   )
 } else {
   var dependencies: [Target.Dependency] = ["_CSwiftSyntax"]
-  var linkerSettings: [LinkerSetting] = []
 
   #if os(Windows)
     dependencies.append("_InternalSwiftSyntaxParser")
   #endif
 
-  swiftSyntaxTarget = .target(name: "SwiftSyntax", dependencies: dependencies, linkerSettings: linkerSettings)
+  swiftSyntaxTarget = .target(name: "SwiftSyntax", dependencies: dependencies)
 }
 
 package.targets.append(swiftSyntaxTarget)
